@@ -1,0 +1,81 @@
+body {
+    background: #eee;
+}
+
+.container {
+    width: 1600px;
+    background: white;
+    margin: auto;
+    padding-bottom: 0px;
+}
+
+.view-title {
+    background: #f8f9fa;
+    padding: 8px 0px 8px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+#map-view {
+    height: 850px;
+}
+
+#usage-patterns-view{
+    height: 380px;
+}
+
+#demography-view {
+    height: 380px;
+}
+
+#bar-chart,
+#heatmap {
+    height: 380px;
+}
+
+#mosaic-plot {
+    height: 380px;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col-left {
+    flex: 1;
+    max-width: 50%;
+    padding: 0px 6px 0px 6px;
+}
+
+.col-right {
+    flex: 1;
+    max-width: 50%;
+    padding: 0px 6px 0px 6px;
+}
+
+.col-full {
+    flex: 1;
+    max-width: 100%;
+    padding: 0px 6px 0px 6px;
+}
+
+.countries {
+    fill: #ccc;
+    stroke: #fff;
+    stroke-width: 0.5px;
+}
+.rent-location {
+    fill: blue;
+    opacity: 0.7;
+}
+.return-location {
+    fill: red;
+    opacity: 0.7;
+}
+.arc {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1px;
+    opacity: 0.7;
+}
