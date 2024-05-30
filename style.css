@@ -17,24 +17,24 @@ body {
 }
 
 #map-view {
-    height: 850px;
+    height: 800px;
 }
 
 #usage-patterns-view{
-    height: 380px;
+    height: 370px;
 }
 
 #demography-view {
-    height: 380px;
+    height: 370px;
 }
 
 #bar-chart,
 #heatmap {
-    height: 380px;
+    height: 370px;
 }
 
 #mosaic-plot {
-    height: 380px;
+    height: 370px;
 }
 
 .row {
