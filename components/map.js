@@ -17,12 +17,12 @@ class Map {
         this.rentCounts = this.calculateRentCounts();
         this.combinedCounts = this.calculateCombinedCounts();
         this.top10PercentThreshold = this.initialThreshold; // Initial threshold
-        this.map.on('zoomend', () => this.updatePaths());
+        this.map.on('zoomend', () => this.updatePaths(this.state));
         this.addButtons();
     }
     
     initialize() {
-        this.updatePaths(); // Initial rendering
+        this.updatePaths(this.state); // Initial rendering
     }
 
     calculatePathCounts() {
@@ -84,7 +84,8 @@ class Map {
         return combinedCounts;
     }
 
-    updatePaths() {
+    updatePaths(state) {
+        this.state = state
         if(this.state !== 'Paths') 
             return;
         // Adjust threshold based on zoom level
@@ -235,7 +236,7 @@ class Map {
             { id: 'return-locations', text: 'Return', handler: () => this.showReturnLocations() },
             { id: 'rent-locations', text: 'Rent', handler: () => this.showRentLocations() },
             { id: 'combined-locations', text: 'Combined', handler: () => this.showCombinedLocations() },
-            { id: 'Paths', text: 'Paths', handler: () => this.updatePaths() }
+            { id: 'Paths', text: 'Paths', handler: () => this.updatePaths('Paths') }
         ];
 
         buttons.forEach(button => {
@@ -262,7 +263,7 @@ class Map {
 
     showReturnLocations() {
         this.clearPaths();
-        this.state = 'Return'
+        this.state = 'Bubble'
         Object.entries(this.returnCounts).forEach(([location, count]) => {
             const [lat, lon] = location.split(',').map(Number);
             L.circleMarker([lat, lon], {
@@ -276,7 +277,7 @@ class Map {
 
     showRentLocations() {
         this.clearPaths();
-        this.state = 'Rent'
+        this.state = 'Bubble'
         Object.entries(this.rentCounts).forEach(([location, count]) => {
             const [lat, lon] = location.split(',').map(Number);
             L.circleMarker([lat, lon], {
@@ -290,7 +291,7 @@ class Map {
 
     showCombinedLocations() {
         this.clearPaths();
-        this.state = 'Combined'
+        this.state = 'Bubble'
         Object.entries(this.combinedCounts).forEach(([location, count]) => {
             const [lat, lon] = location.split(',').map(Number);
             L.circleMarker([lat, lon], {
