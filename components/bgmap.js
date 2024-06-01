@@ -1,10 +1,15 @@
-class Map {
+class Bgmap {
     constructor(data) {
         this.data = data;
         this.width = 648;
         this.height = 800;
         this.initialThreshold = 0.91;
-        this.map = L.map('map-view').setView([37.553, 127.043], 14); // Center on Seongdong-gu, Seoul
+        if (!Map.instance) {
+            this.map = L.map('map-view').setView([37.553, 127.043], 14); // Center on Seongdong-gu, Seoul
+            Map.instance = this.map;
+        } else {
+            this.map = Map.instance;
+        }        
         this.state = 'Paths';
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -144,14 +149,13 @@ class Map {
             { id: 'return-locations', text: 'Return Count', handler: () => this.showReturnLocations() },
             { id: 'rent-locations', text: 'Rental Count', handler: () => this.showRentLocations() },
             { id: 'combined-locations', text: 'Total', handler: () => this.showCombinedLocations() },
-            { id: 'Paths', text: 'Paths', handler: () => this.updatePaths('Paths') }
+            { id: 'paths', text: 'Paths', handler: () => this.updatePaths('Paths') }
         ];
 
         buttons.forEach(button => {
             buttonContainer.append('button')
                 .attr('id', button.id)
                 .text(button.text)
-                .on('click', button.handler);
         });
     }
 
