@@ -123,7 +123,7 @@ class Lollipop {
             .data(data)
             .join("circle")
 			.on('mouseover', (event, d) => {
-                this.tooltip.style("display", "block").select(".tooltip-inner").text(`Counts: ${d.value}`);
+                this.tooltip.style("display", "block").select(".tooltip-inner").text(`Count: ${d.value}`);
                 this.tooltip.style("top", `${event.pageY - 37}px`).style("left", `${event.pageX - 8}px`);
             })
             .on('mousemove', (event, d) => {
