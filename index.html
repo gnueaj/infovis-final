@@ -25,8 +25,8 @@
                 <div class="view-container">
                     <h4 class="view-title">Map</h4>
                     <div id="map-view" style="width: 648px; height: 800px;">
-                        <div id="legend" style="position: absolute; display: none;"></div>
-                        <div id="map-btn" style="position: absolute; display: none;"></div>
+                        <div id="legend" style="position: absolute;"></div>
+                        <div id="map-btn" style="position: absolute; visibility: hidden;"></div>
                     </div>
                 </div>
             </div>
@@ -57,11 +57,7 @@
                         </div>
                     </h4>
                     <div class="col-full" id="heatmap" style="display: block;"></div>
-                    <div class="col-full" id="mosaic-plot" style="display: block;"></div>
-                    <div class="tooltip bs-tooltip-top show" id="tv-tooltip" role="tooltip" style="display:none; position: absolute;">
-                        <div class="tooltip-arrow"></div>
-                        <div class="tooltip-inner"></div>
-                    </div>
+                    <div class="col-full" id="mosaic-plot" style="display: none;"></div>
                 </div>
             </div>
         </div>
@@ -136,6 +132,10 @@
                 const isChecked = d3.select(this).property('checked');
                 d3.select('#mosaic-plot').style('display', isChecked ? 'block' : 'none');
                 d3.select('#heatmap').style('display', isChecked ? 'none' : 'block');
+
+                if (isChecked) {
+                    mosaicplot.renderLegend();
+                }
             });
 
         });

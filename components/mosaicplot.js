@@ -17,6 +17,11 @@ class MosaicPlot {
     }
 
     initialize() {
+        // 기존 초기화 코드
+        this.renderPlot();
+    }
+
+    renderPlot() {
         const groupedData = d3.rollup(this.data, v => v.length,
             d => {
                 const birthYear = +d.BIRTH_YEAR;
@@ -75,7 +80,8 @@ class MosaicPlot {
             }
             accumulatedWidth += width + 1.2; // Add space between groups
         }
-		console.log(mosaicData);
+
+        console.log(mosaicData);
         this.svg.selectAll("rect")
             .data(mosaicData)
             .join("rect")
@@ -84,7 +90,7 @@ class MosaicPlot {
             .attr("width", d => d.x1 - d.x0)
             .attr("height", d => this.height * (d.y1 - d.y0))
             .attr("fill", d => this.color(d.sexGroup))
-            // .attr("stroke", "black");
+
 
         const x = d3.scaleBand().domain(birthYearGroups).range([0, this.width - 25]);
         const y = d3.scaleLinear().range([this.height, 0]).domain([0, 1]);
@@ -129,35 +135,39 @@ class MosaicPlot {
                 .style("left", (event.pageX - 10) + "px");
         };
 
-        const mouseout = function(event, d) {
+        const mouseleave = function(event, d) {
             tooltip.style("display", "none");
         };
 
         this.svg.selectAll("rect")
             .on("mouseover", mouseover)
             .on("mousemove", mousemove)
-            .on("mouseout", mouseout);
+            .on("mouseout", mouseleave);
+
+        this.renderLegend();
+    }
+
+    renderLegend() {
+        this.svg.select(".legend").remove(); // Remove existing legend if any
 
         const legend = d3.legendColor()
             .shapeWidth(30)
             .orient('vertical')
             .scale(this.color);
 
-        // Append a group element for the legend and set its position
         const legendGroup = this.svg.append("g")
             .attr("class", "legend")
             .attr("transform", `translate(${this.width - 125}, 20)`);
 
-        // Add a white background rectangle for better visibility
         legendGroup.append("rect")
             .attr("x", -10)
             .attr("y", -10)
             .attr("width", 100)
             .attr("height", 60)
-            .attr("rx", 10) // Rounded corners
-            .attr("ry", 10) // Rounded corners
+            .attr("rx", 10) 
+            .attr("ry", 10) 
             .attr("fill", "white")
-            .attr("opacity", 0.5) // Slightly transparent
+            .attr("opacity", 0.5) 
             .attr("stroke", "black");
 
         legendGroup.call(legend);
