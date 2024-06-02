@@ -14,7 +14,6 @@ class Lollipop {
         this.xScale = d3.scaleLinear();
         this.yScale = d3.scaleBand().padding(1);
 
-        // Set initial attributes for SVG
         this.svg
             .attr("width", this.width + this.margin.left + this.margin.right)
             .attr("height", this.height + this.margin.top + this.margin.bottom);
@@ -67,7 +66,7 @@ class Lollipop {
 
         // Update axes
         const xAxis = d3.axisBottom(this.xScale)
-            .tickFormat(d3.format('d')); // Format ticks as integers
+            .tickFormat(d3.format('d'));
 
         if (d3.max(data, d => d.value) <= 1) {
             xAxis.tickValues([0, 1]);

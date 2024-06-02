@@ -30,9 +30,9 @@ class Heatmap {
 
         this.data.forEach(d => {
             const date = parseTime(d.RENT_DT);
-            const dayOfWeek = (date.getDay() + 6) % 7; // Change to Monday-based week (0: Mon, 6: Sun)
+            const dayOfWeek = (date.getDay() + 6) % 7;
             const hour = date.getHours();
-            const timeSlot = Math.floor((hour + 1) / 2) * 2; // Shift to 1-hour forward 2-hour slots
+            const timeSlot = Math.floor((hour + 1) / 2) * 2; 
 
             heatmapData.push({
                 day: dayOfWeek,

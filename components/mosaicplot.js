@@ -17,7 +17,6 @@ class MosaicPlot {
     }
 
     initialize() {
-        // 기존 초기화 코드
         this.renderPlot();
     }
 
@@ -148,7 +147,7 @@ class MosaicPlot {
     }
 
     renderLegend() {
-        this.svg.select(".legend").remove(); // Remove existing legend if any
+        this.svg.select(".legend").remove();
 
         const legend = d3.legendColor()
             .shapeWidth(30)
