@@ -14,6 +14,7 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="components/bgmap.js" defer></script>
     <script src="components/lollipop.js" defer></script>
+    <script src="components/heatmap.js" defer></script>
 </head>
 <body>
     <main class="container pb-3">
@@ -60,6 +61,16 @@
         let map, lollipop, heatmap, mosaicplot;
         let currentSortOrder = 'desc';
 
+        function updateBgmap(data, state){
+            map.updateData(data);
+            map.updatePaths(state);
+            locationData = map.markerData;
+            pathData = map.pathCounts;
+            if(state === "return") map.showReturnLocations();
+            if(state === "rent") map.showRentLocations();
+            if(state === "combined") map.showCombinedLocations();
+        }
+
         function updateLollipop(locationData, pathData, countMode) {
             lollipop.update(locationData, pathData, countMode, currentSortOrder);
         }
@@ -68,7 +79,7 @@
             data = csvData;
 
             // map initialize
-            map = new Bgmap(csvData);
+            map = new Bgmap(data);
             map.initialize();
             locationData = map.markerData;
             pathData = map.pathCounts;
@@ -78,22 +89,22 @@
             lollipop.initialize();
 
             d3.select('#return-locations').on('click', () => {
-                map.showReturnLocations();
+                updateBgmap(data, 'return')
                 updateLollipop(locationData, pathData, 'return');
             });
 
             d3.select('#rent-locations').on('click', () => {
-                map.showRentLocations();
+                updateBgmap(data, 'rent')
                 updateLollipop(locationData, pathData, 'rent');
             });
 
             d3.select('#combined-locations').on('click', () => {
-                map.showCombinedLocations();
+                updateBgmap(data, 'combined')
                 updateLollipop(locationData, pathData, 'combined');
             });
 
             d3.select('#paths').on('click', () => {
-                map.updatePaths('Paths');
+                updateBgmap(data, 'Paths')
                 updateLollipop(locationData, pathData, 'paths');
             });
 
@@ -101,6 +112,8 @@
                 currentSortOrder = this.id === 'sort-asc' ? 'asc' : 'desc';
                 updateLollipop(locationData, pathData, lollipop.currentMode);
             });
+            
+
         });
     </script>
 

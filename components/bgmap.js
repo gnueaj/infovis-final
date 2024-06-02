@@ -22,65 +22,8 @@ class Bgmap {
     initialize() { 
         this.addButtons();
         this.drawLegend();
-        this.initializeData();
-        this.updatePaths(this.state); 
-    }
-
-    initializeData() {
-        const pathCounts = {};
-        const returnCounts = {};
-        const rentCounts = {};
-        const combinedCounts = {};
-        const markerData = {};
-
-        this.data.forEach(d => {
-            const start = `${d.RENT_LAT},${d.RENT_LON}`;
-            const end = `${d.RTN_LAT},${d.RTN_LON}`;
-            const pathKey = [start, end].sort().join("_");
-
-            // Path counts
-            if (!pathCounts[pathKey]) {
-                pathCounts[pathKey] = 0;
-            }
-            pathCounts[pathKey]++;
-
-            // Return counts
-            if (!returnCounts[end]) {
-                returnCounts[end] = 0;
-            }
-            returnCounts[end]++;
-
-            // Rent counts
-            if (!rentCounts[start]) {
-                rentCounts[start] = 0;
-            }
-            rentCounts[start]++;
-
-            // Combined counts
-            if (!combinedCounts[start]) {
-                combinedCounts[start] = 0;
-            }
-            if (!combinedCounts[end]) {
-                combinedCounts[end] = 0;
-            }
-            combinedCounts[start]++;
-            combinedCounts[end]++;
-
-            // Marker data
-            if (!markerData[start]) {
-                markerData[start] = { name: d.RENT_NM, rentCount: 0, returnCount: 0 };
-            }
-            if (!markerData[end]) {
-                markerData[end] = { name: d.RTN_NM, rentCount: 0, returnCount: 0 };
-            }
-            markerData[start].rentCount++;
-            markerData[end].returnCount++;
-        });
-        this.pathCounts = pathCounts;
-        this.returnCounts = returnCounts;
-        this.rentCounts = rentCounts;
-        this.combinedCounts = combinedCounts;
-        this.markerData = markerData;
+        this.updateData(this.data);
+        this.updatePaths(this.state);
     }
 
     drawLegend() {
@@ -159,36 +102,63 @@ class Bgmap {
         });
     }
 
-    updatePaths(state) {
-        this.state = state;
-        if (this.state !== 'Paths') {
-            this.hideLegend();
-            return;
-        }
-        this.showLegend();
+    updateData(data) {
+        this.data=data;
+        const pathCounts = {};
+        const returnCounts = {};
+        const rentCounts = {};
+        const combinedCounts = {};
+        const markerData = {};
 
-        // Adjust threshold based on zoom level
-        const zoomLevel = this.map.getZoom();
-        this.top10PercentThreshold = Math.min(1, Math.max(0, this.initialThreshold - (zoomLevel - 14) * 0.06));
-        const counts = Object.values(this.pathCounts).sort((a, b) => a - b);
-        const thresholdValue = d3.quantile(counts, this.top10PercentThreshold);
+        this.data.forEach(d => {
+            const start = `${d.RENT_LAT},${d.RENT_LON}`;
+            const end = `${d.RTN_LAT},${d.RTN_LON}`;
+            const pathKey = [start, end].sort().join("_");
 
-        this.topPaths = Object.entries(this.pathCounts)
-            .filter(([key, count]) => count >= thresholdValue)
-            .map(([key, count]) => ({ key, count }));
+            // Path counts
+            if (!pathCounts[pathKey]) {
+                pathCounts[pathKey] = 0;
+            }
+            pathCounts[pathKey]++;
 
-        this.topPaths.sort((a, b) => a.count - b.count);
+            // Return counts
+            if (!returnCounts[end]) {
+                returnCounts[end] = 0;
+            }
+            returnCounts[end]++;
 
-        this.colorScale = d3.scaleQuantize()
-            .domain([0, this.topPaths.length])
-            .range(d3.range(10).map(i => d3.interpolateReds(i / 9)));
+            // Rent counts
+            if (!rentCounts[start]) {
+                rentCounts[start] = 0;
+            }
+            rentCounts[start]++;
 
-        this.thicknessScale = d3.scaleQuantize()
-            .domain([0, this.topPaths.length])
-            .range(d3.range(10).map(i => 1.5 + i * 0.8 ));
+            // Combined counts
+            if (!combinedCounts[start]) {
+                combinedCounts[start] = 0;
+            }
+            if (!combinedCounts[end]) {
+                combinedCounts[end] = 0;
+            }
+            combinedCounts[start]++;
+            combinedCounts[end]++;
 
-        this.clearPaths();
-        this.drawPaths();
+            // Marker data
+            if (!markerData[start]) {
+                markerData[start] = { name: d.RENT_NM, rentCount: 0, returnCount: 0 };
+            }
+            if (!markerData[end]) {
+                markerData[end] = { name: d.RTN_NM, rentCount: 0, returnCount: 0 };
+            }
+            markerData[start].rentCount++;
+            markerData[end].returnCount++;
+        });
+
+        this.pathCounts = pathCounts;
+        this.returnCounts = returnCounts;
+        this.rentCounts = rentCounts;
+        this.combinedCounts = combinedCounts;
+        this.markerData = markerData;
     }
 
     clearPaths() {
@@ -233,7 +203,40 @@ class Bgmap {
                             Total: ${marker.rentCount + marker.returnCount}<br>`).addTo(this.map);
         });
     }
+    
+    updatePaths(state) {
+        this.state = state;
+        if (this.state !== 'Paths') {
+            this.hideLegend();
+            return;
+        }
+        this.showLegend();
 
+        // Adjust threshold based on zoom level
+        const zoomLevel = this.map.getZoom();
+        this.top10PercentThreshold = Math.min(1, Math.max(0, this.initialThreshold - (zoomLevel - 14) * 0.05));
+        const counts = Object.values(this.pathCounts).sort((a, b) => a - b);
+        const thresholdValue = d3.quantile(counts, this.top10PercentThreshold);
+
+        this.topPaths = Object.entries(this.pathCounts)
+            .filter(([key, count]) => count >= thresholdValue)
+            .map(([key, count]) => ({ key, count }));
+
+        this.topPaths.sort((a, b) => a.count - b.count);
+
+        this.colorScale = d3.scaleQuantize()
+            .domain([0, this.topPaths.length])
+            .range(d3.range(10).map(i => d3.interpolateReds(i / 9)));
+
+        this.thicknessScale = d3.scaleQuantize()
+            .domain([0, this.topPaths.length])
+            .range(d3.range(10).map(i => 1.5 + i * 0.8 ));
+
+        this.clearPaths();
+        this.drawPaths();
+    }
+
+    
     showReturnLocations() {
         this.clearPaths();
         this.hideLegend();

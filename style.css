@@ -3,7 +3,7 @@ body {
 }
 
 .container {
-    width: 1600px;
+    width: 3000px;
     background: white;
     margin: auto;
     padding-bottom: 0px;
@@ -68,7 +68,7 @@ body {
 .col-full {
     flex: 1;
     max-width: 100%;
-    padding: 0px 6px 0px 6px;
+    padding: 0px 6px 0px 0px;
 }
 
 .countries {
@@ -86,16 +86,16 @@ body {
 }
 
 #demography-view {
-    height: 370px;
+    height: 372px;
 }
 
 #lollipop {
-    height: 370px;
+    height: 372px;
 }
 
 #mosaic-plot,
 #heatmap {
-    height: 350px;
+    height: 372px;
 }
 
 #legend {

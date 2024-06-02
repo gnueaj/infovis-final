@@ -1,8 +1,8 @@
 class Lollipop {
     constructor(locationData, pathData) {
-        this.margin = { top: 15, right: 63, bottom: 30, left: 137 };
+        this.margin = { top: 15, right: 63, bottom: 35, left: 137 };
         this.width = 648 - this.margin.left - this.margin.right;
-        this.height = 370 - this.margin.top - this.margin.bottom;
+        this.height = 372 - this.margin.top - this.margin.bottom;
         this.locationData = locationData;
         this.pathData = pathData;
 
@@ -20,8 +20,6 @@ class Lollipop {
             .attr("height", this.height + this.margin.top + this.margin.bottom);
 
         this.container.attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
-
-        // Initialize tooltip
         this.tooltip = d3.select("#sc-tooltip");
     }
 
@@ -100,7 +98,7 @@ class Lollipop {
                 .attr("class", "y-axis-label")
                 .attr("x", -10)
                 .attr("y", d => this.yScale(d.key))
-                .style("font-size", "10px") // 글씨 크기 조정
+                .style("font-size", "10px")
                 .style("text-anchor", "end")
                 .selectAll("tspan")
                 .data(d => [`${d.key.split('<->')[0]}`, `${d.key.split('<->')[1]}`])
@@ -127,7 +125,7 @@ class Lollipop {
             .data(data)
             .join("circle")
 			.on('mouseover', (event, d) => {
-                this.tooltip.style("display", "block").select(".tooltip-inner").text(`Count: ${d.value}`);
+                this.tooltip.style("display", "block").select(".tooltip-inner").text(`Counts: ${d.value}`);
                 this.tooltip.style("top", `${event.pageY - 37}px`).style("left", `${event.pageX - 8}px`);
             })
             .on('mousemove', (event, d) => {
