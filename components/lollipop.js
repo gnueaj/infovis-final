@@ -93,8 +93,7 @@ class Lollipop {
         if (countMode === "paths") {
             this.container.selectAll(".y-axis-label")
                 .data(data)
-                .enter()
-                .append("text")
+                .join("text")
                 .attr("class", "y-axis-label")
                 .attr("x", -10)
                 .attr("y", d => this.yScale(d.key))
@@ -102,8 +101,7 @@ class Lollipop {
                 .style("text-anchor", "end")
                 .selectAll("tspan")
                 .data(d => [`${d.key.split('<->')[0]}`, `${d.key.split('<->')[1]}`])
-                .enter()
-                .append("tspan")
+                .join("tspan")
                 .attr("x", -10)
                 .attr("dy", (d, i) => i === 0 ? 0 : "1.1em")
                 .text(d => d);

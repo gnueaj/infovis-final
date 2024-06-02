@@ -89,8 +89,8 @@ class Bgmap {
             .style('display', 'block');
 
         const buttons = [
-            { id: 'return-locations', text: 'Return Count', handler: () => this.showReturnLocations() },
-            { id: 'rent-locations', text: 'Rental Count', handler: () => this.showRentLocations() },
+            { id: 'return-locations', text: 'Return Counts', handler: () => this.showReturnLocations() },
+            { id: 'rent-locations', text: 'Rental Counts', handler: () => this.showRentLocations() },
             { id: 'combined-locations', text: 'Total', handler: () => this.showCombinedLocations() },
             { id: 'paths', text: 'Paths', handler: () => this.updatePaths('Paths') }
         ];

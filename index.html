@@ -16,6 +16,7 @@
     <script src="components/bgmap.js" defer></script>
     <script src="components/lollipop.js" defer></script>
     <script src="components/heatmap.js" defer></script>
+    <script src="components/mosaicplot.js" defer></script>
 </head>
 <body>
     <main class="container pb-3">
@@ -33,9 +34,9 @@
                 <div class="view-container">
                     <h4 class="view-title">Usage Counts</h4>
                     <div class="col-full" id="lollipop">
-                        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="position: absolute; left:80%;">
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="position: absolute; left:79%;">
                             <label class="btn">
-                                <input type="radio" name="sortOrder" id="sort-desc" autocomplete="off" checked> Max
+                                <input type="radio" name="sortOrder" id="sort-desc" autocomplete="off" checked="True"> Max
                             </label>
                             <label class="btn">
                                 <input type="radio" name="sortOrder" id="sort-asc" autocomplete="off"> Min
@@ -48,9 +49,19 @@
                     </div>
                 </div>
                 <div class="view-container">
-                    <h4 class="view-title">Traffic and Demographics</h4>
-                    <div class="col-full" id="heatmap"></div>
-                    <div class="col-full" id="mosaic-plot" style="display: none;"></div>
+                    <h4 class="view-title d-flex justify-content-between align-items-center">
+                        Traffic Volume and Demographics
+                        <div class="form-check form-switch" style="margin-right: 40px;">
+                            <input class="form-check-input" type="checkbox" id="viewToggle">
+                            <label class="form-check-label" for="viewToggle" checked="False"></label>
+                        </div>
+                    </h4>
+                    <div class="col-full" id="heatmap" style="display: block;"></div>
+                    <div class="col-full" id="mosaic-plot" style="display: block;"></div>
+                    <div class="tooltip bs-tooltip-top show" id="tv-tooltip" role="tooltip" style="display:none; position: absolute;">
+                        <div class="tooltip-arrow"></div>
+                        <div class="tooltip-inner"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,6 +102,10 @@
             // heatmap initialize
             heatmap = new Heatmap(data);
             heatmap.initialize();
+            
+            // moisaicplot initialize
+            mosaicplot = new MosaicPlot(data);
+            mosaicplot.initialize();
 
             d3.select('#return-locations').on('click', () => {
                 updateBgmap(data, 'return')
@@ -116,6 +131,13 @@
                 currentSortOrder = this.id === 'sort-asc' ? 'asc' : 'desc';
                 updateLollipop(locationData, pathData, lollipop.currentMode);
             });
+
+            d3.select('#viewToggle').on('change', function() {
+                const isChecked = d3.select(this).property('checked');
+                d3.select('#mosaic-plot').style('display', isChecked ? 'block' : 'none');
+                d3.select('#heatmap').style('display', isChecked ? 'none' : 'block');
+            });
+
         });
     </script>
 

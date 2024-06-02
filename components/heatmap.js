@@ -50,6 +50,16 @@ class Heatmap {
         }
 
         const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+		function convertDays(day){
+			if(day === "Mon") return "Monday";
+			else if(day === "Tue") return "Tuesday";
+			else if(day === "Wed") return "Wednesday";
+			else if(day === "Thu") return "Thursday";
+			else if(day === "Fri") return "Friday";
+			else if(day === "Sat") return "Saturday";
+			else if(day === "Sun") return "Sunday";
+			else return "Undefined";
+		}
         const times = Array.from({ length: 12 }, (_, i) => i * 2); // [0, 2, 4, ..., 22]
 
         this.x.domain(times);
@@ -70,7 +80,9 @@ class Heatmap {
 
         const mouseover = function(event, d) {
             tooltip.style("display", "block")
-                .select(".tooltip-inner").html(`Day: ${days[d.day]}<br>Time: ${d.time - 1}:00 - ${d.time + 1}:00<br>Count: ${d.value}`)
+                .select(".tooltip-inner").html(`Day: ${convertDays(days[d.day])}<br>
+												Time: ${d.time - 1}:00 - ${d.time + 1}:00<br>
+												Count: ${d.value}`)
 				.style("text-align", "left");
         };
 
@@ -86,8 +98,7 @@ class Heatmap {
         // Draw the heatmap
         this.svg.selectAll()
           .data(flattenedData, function(d) { return d.day + ':' + d.time; })
-          .enter()
-          .append("rect")
+          .join("rect")
           .attr("x", d => this.x(d.time))
           .attr("y", d => this.y(days[d.day]))
           .attr("width", this.x.bandwidth())
@@ -115,7 +126,7 @@ class Heatmap {
                 offset: `${100 * i / n.length}%`, 
                 color: this.myColor(t) 
             })))
-            .enter().append("stop")
+            .join("stop")
             .attr("offset", d => d.offset)
             .attr("stop-color", d => d.color);
 
@@ -128,7 +139,7 @@ class Heatmap {
         const legendScale = d3.scaleLinear()
             .domain(this.myColor.domain())
             .range([legendHeight, 0]);
-
+		
         this.svg.append("g")
             .attr("transform", `translate(${this.width + 45}, 0)`)
             .call(d3.axisRight(legendScale));
