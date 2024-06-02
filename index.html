@@ -12,6 +12,7 @@
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://d3-legend.susielu.com/d3-legend.min.js"></script>
     <script src="components/bgmap.js" defer></script>
     <script src="components/lollipop.js" defer></script>
     <script src="components/heatmap.js" defer></script>
@@ -43,14 +44,13 @@
                     </div>
                     <div class="tooltip bs-tooltip-top show" id="sc-tooltip" role="tooltip" style="display:none; position: absolute;">
                         <div class="tooltip-arrow"></div>
-                        <div class="tooltip-inner">
-                    </div>
+                        <div class="tooltip-inner"></div>
                     </div>
                 </div>
                 <div class="view-container">
                     <h4 class="view-title">Traffic and Demographics</h4>
                     <div class="col-full" id="heatmap"></div>
-                    <div id="demography-view" id="mosaic-plot" style="display: none;"></div>
+                    <div class="col-full" id="mosaic-plot" style="display: none;"></div>
                 </div>
             </div>
         </div>
@@ -87,6 +87,10 @@
             // lollipop initialize
             lollipop = new Lollipop(locationData, pathData);
             lollipop.initialize();
+            
+            // heatmap initialize
+            heatmap = new Heatmap(data);
+            heatmap.initialize();
 
             d3.select('#return-locations').on('click', () => {
                 updateBgmap(data, 'return')
@@ -112,8 +116,6 @@
                 currentSortOrder = this.id === 'sort-asc' ? 'asc' : 'desc';
                 updateLollipop(locationData, pathData, lollipop.currentMode);
             });
-            
-
         });
     </script>
 
